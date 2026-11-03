@@ -1,0 +1,6 @@
+# Local-only secrets and test output; never commit
+local.env
+*.local.json
+artifacts/
+playwright/node_modules/
+playwright/test-results/

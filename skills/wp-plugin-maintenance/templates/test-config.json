@@ -1,0 +1,40 @@
+{
+  "version": 1,
+  "project": {
+    "configured": false,
+    "name": "",
+    "hosting": "",
+    "wordpressRoot": "",
+    "pluginsDir": "",
+    "wpCli": "",
+    "protectedPlugins": [],
+    "protectedPaths": [],
+    "allowedBaseBranches": [
+      "main",
+      "master",
+      "production"
+    ]
+  },
+  "environments": {
+    "staging": {
+      "url": "",
+      "basicAuth": {
+        "enabled": false,
+        "usernameEnv": "SLA_STAGING_BASIC_AUTH_USER",
+        "passwordEnv": "SLA_STAGING_BASIC_AUTH_PASSWORD"
+      }
+    },
+    "production": {
+      "url": ""
+    }
+  },
+  "plugins": {},
+  "testing": {
+    "languages": [],
+    "framework": "playwright",
+    "productionReadOnly": true,
+    "playwright": {
+      "artifactsDirectory": "SLA/YYYY-MM/artifacts"
+    }
+  }
+}
