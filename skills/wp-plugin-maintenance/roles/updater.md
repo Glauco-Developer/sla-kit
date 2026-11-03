@@ -29,7 +29,7 @@ Read-only discovery for a project never configured. Change nothing. Do not ask f
 ## prepare
 
 1. `git branch --show-current` must be in `project.allowedBaseBranches` (default `main`, `master`, `production`). Else stop.
-2. `git status --porcelain --untracked-files=all` must be empty (ignore only ignored files). Check for unresolved conflicts (`git diff --name-only --diff-filter=U`). Else stop and list the offending paths.
+2. `git status --porcelain --untracked-files=all -- . ':(exclude)SLA'` must be empty (ignore only ignored files). `SLA/` is the workflow's own data and is always excluded from every Git check in this role; never ask about it or add it to `.git/info/exclude`. Check for unresolved conflicts (`git diff --name-only --diff-filter=U`). Else stop and list the offending paths.
 3. Identify the repository: `git remote -v`, hosting detection hints, `project.pluginsDir` exists (if `project.configured` is not true, stop and ask the main agent to run Setup). Discover the WP-CLI command (`project.wpCli`, else try `wp`, `lando wp`, `vip dev-env exec`, ddev/docker) and confirm `wp core version` and `wp option get siteurl` work. Confirm the WP-CLI install's plugins directory is **this repo's** directory (compare `wp plugin path` / `wp eval 'echo WP_PLUGIN_DIR;'` with the repo path; for containers, check the mount). If it is a different copy, stop: updates would not appear in Git.
 4. `git fetch`, then `git pull --ff-only`. Stop if it cannot fast-forward.
 5. Branch `sla/plugins-updates-YYYY-MM` (current calendar month). If it exists locally or remotely, do not touch it: report its state (`git log --oneline -5`, ahead/behind, tree status) and reply `NEEDS_INPUT: resume existing branch?`. Else `git checkout -b`.
@@ -55,7 +55,7 @@ For each approved slug, **one at a time**:
 3. `git status --porcelain` baseline.
 4. `wp plugin update <slug>`; capture exit code and output (redact anything secret-looking).
 5. Verify the installed version afterward. A mismatch is a failure.
-6. `git status --porcelain --untracked-files=all` and `git diff --stat`: every changed path must be inside `<pluginsDir>/<slug>/`. Anything else (other plugins, themes, MU, config, lock files, uploads) is an **unexpected modification**: stop and report it without reverting.
+6. `git status --porcelain --untracked-files=all -- . ':(exclude)SLA'` and `git diff --stat -- . ':(exclude)SLA'`: every changed path must be inside `<pluginsDir>/<slug>/`. Anything else (other plugins, themes, MU, config, lock files, uploads) is an **unexpected modification**: stop and report it without reverting.
 7. Record: Updated / Failed / Manual Update Required / Already Up to Date, with notes (license errors, missing updater, extra upgrade steps). On failure do not retry destructively; report the tree state and whether continuing is safe.
 
 Return a structured list per plugin: `slug, previousVersion, targetVersion, installedVersion, status, exitCode, changedPaths summary, notes`, plus the overall `git status` summary and whether the tree is safe to continue.

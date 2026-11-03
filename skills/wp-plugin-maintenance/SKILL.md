@@ -77,7 +77,7 @@ The kit is project-agnostic. Nothing is assumed about hosting, folder layout, WP
 Delegate to `wp-plugin-updater` (task: *prepare*). It must stop and report on any failure below.
 
 1. Current branch must be `main`, `master`, or `production`. Else **stop**.
-2. Working tree and index clean, including relevant untracked files. Else **stop**.
+2. Working tree and index clean, including relevant untracked files. Else **stop**. The `SLA/` folder is the workflow's own data (config, state, reports, created by Setup) and is **always ignored** by this check and every later Git cleanliness check. Never ask the developer about it, never add it to `.git/info/exclude`, never commit it on their behalf. It is carried along when the SLA branch is created.
 3. Verify this is the correct WordPress repository (plugin directory exists, WP-CLI identifies the install). Then ask **one** go/no-go question that also confirms the base branch: "Start the YYYY-MM maintenance for <project> from branch <branch>?" (Start / Cancel).
 4. `git fetch`, then `git pull --ff-only`. If it cannot fast-forward or conflicts exist, **stop**. Never force, reset, rebase, or discard.
 5. Branch `sla/plugins-updates-YYYY-MM`. If it exists locally or on the remote: do not overwrite, inspect it, and ask whether to resume it. Otherwise `git checkout -b`.
