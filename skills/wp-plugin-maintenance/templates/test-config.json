@@ -18,6 +18,7 @@
   "environments": {
     "staging": {
       "url": "",
+      "skipped": false,
       "basicAuth": {
         "enabled": false,
         "usernameEnv": "SLA_STAGING_BASIC_AUTH_USER",
@@ -25,7 +26,8 @@
       }
     },
     "production": {
-      "url": ""
+      "url": "",
+      "skipped": false
     }
   },
   "plugins": {},

@@ -1,0 +1,9 @@
+{
+  "name": "sla-kit",
+  "version": "2.0.0",
+  "license": "MIT",
+  "description": "Monthly WordPress plugin maintenance (SLA) workflow: local updates, Playwright validation, staging/production checks and reports.",
+  "author": { "name": "Glauco-Developer" },
+  "repository": "https://github.com/Glauco-Developer/sla-kit",
+  "keywords": ["wordpress", "maintenance", "sla", "playwright", "wp-cli"]
+}

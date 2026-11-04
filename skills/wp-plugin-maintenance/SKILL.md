@@ -1,6 +1,6 @@
 ---
 name: wp-plugin-maintenance
-description: Monthly WordPress plugin maintenance (SLA) workflow for any hosting (WordPress VIP, WP Engine, other). Use when the developer asks to start, resume, or continue monthly plugin updates, SLA maintenance, staging/production validation after plugin updates, or the SLA plugin-updates report. Everything runs locally; staging and production are only tested, never updated directly.
+description: Monthly WordPress plugin maintenance (SLA) workflow for any hosting provider. Use when the developer asks to start, resume, or continue monthly plugin updates, SLA maintenance, staging/production validation after plugin updates, or the SLA plugin-updates report. Everything runs locally; staging and production are only tested, never updated directly.
 ---
 
 # WordPress Plugin Maintenance (SLA)
@@ -12,7 +12,7 @@ You are the **main agent**. You own the conversation, every approval, every phas
 - `wp-plugin-updater`: environment discovery, WP-CLI, Git prep, inventory, updates, version/diff verification.
 - `wp-plugin-tester`: the dedicated Playwright suite, plugin-specific tests, staging/production validation, Gravity Forms notification checks.
 
-Do not create other agents. Subagents cannot talk to the developer: they return results, or `NEEDS_INPUT: <question>`, and you ask.
+Installed as a plugin, the agents may appear with a prefix (for example `sla-kit:wp-plugin-updater`); use whichever name the tool lists. When delegating, always put the absolute path of this skill's `roles/updater.md` or `roles/tester.md` in the task. Do not create other agents. Subagents cannot talk to the developer: they return results, or `NEEDS_INPUT: <question>`, and you ask.
 
 **Delegation fallback:** if the tool cannot delegate to subagents, read `roles/updater.md` or `roles/tester.md` (in this skill's folder) and follow its instructions yourself, in the same strict order, and say you are doing so.
 
@@ -23,7 +23,7 @@ The developer wants this to be quicker than doing the updates by hand. Therefore
 - **One question at a time.** Never send a list of questions or a table of values to confirm. Wait for the answer before the next question.
 - **Ask only what cannot be discovered or safely defaulted.** Never ask about protected paths, plugin classes, test tooling, hosting, or WP-CLI details: detect them, apply the safe rules, and mention the result in one line.
 - **Offer choices, recommended first** (use the tool's question UI when it has one, such as AskUserQuestion; otherwise a short numbered list). Always include a cheap way out ("Skip", "Mark as manual").
-- **Ask just in time**, at the step that needs the answer (staging URL when staging starts, a plugin's test page when that plugin is tested), never up front.
+- **Ask just in time**, at the step that needs the answer (a plugin's test page when that plugin is tested). The only exception is the staging and production URLs, asked once during Setup, never up front.
 - Keep messages short: result first, details only on request.
 
 ## Hard rules (never break)
@@ -46,7 +46,7 @@ The developer wants this to be quicker than doing the updates by hand. Therefore
 | `SLA/YYYY-MM/plugin-updates-jira.md` | Short Jira version: only the table of updated plugins, previous -> new version. Template: `references/report-template.md` |
 | `SLA/test-config.json` | Per-project profile (filled by Setup), URLs, plugin test pages, Playwright and Gravity Forms settings |
 | `SLA/playwright-project/` | Optional Playwright specs that belong only to this project (kit specs are never edited per project) |
-| `references/hosting-profiles.md` | Differences between VIP, WP Engine, generic |
+| `references/hosting-profiles.md` | Detection hints and notes per hosting provider (VIP and WP Engine as examples, `generic` for everything else) |
 | `references/plugin-tests.md` | Per-plugin test recipes |
 
 Write state and report after **every** phase change and after every plugin update, so an interruption loses nothing.
@@ -57,7 +57,7 @@ Write state and report after **every** phase change and after every plugin updat
 
 ## Step 0: Start or resume
 
-0. **Kit update (every run, before anything else).** The skill folder is a Git checkout of the shared kit. Run `git -C <this skill's folder> pull --ff-only` and `git -C <this skill's folder> rev-parse --short HEAD`. Report one line (for example `SLA kit updated to 1.4.0 (abc1234)` or `SLA kit already up to date`). If the pull fails (offline, local edits), continue with the installed version and say so. Record the short hash as `kitVersion` in `state.json`. Never change the kit files from inside a project run.
+0. **Kit version (every run, before anything else).** Read the `VERSION` file in this skill's folder and report one line (for example `SLA kit 2.0.0`). The kit is updated by the plugin manager (`/plugin marketplace update`), never from inside a run. Record the version as `kitVersion` in `state.json`. Never change the kit files from inside a project run.
 1. Compute the current month `YYYY-MM`. Look for `SLA/YYYY-MM/state.json` (also check the SLA branch if you are on the base branch: `git show sla/plugins-updates-YYYY-MM:SLA/YYYY-MM/state.json`).
 2. **No state**: start at PREPARATION.
 3. **State exists**: read it, run `git branch --show-current` and `git status --short`, compare with the state (expected SLA branch, updated plugins). Summarize where things stand. If inconsistent (wrong branch, plugins listed as updated but versions differ, dirty tree you did not expect), stop and ask. Otherwise continue from `state.phase`. If the phase is a final state, report it and ask whether the developer wants a new run.
@@ -68,9 +68,10 @@ Write state and report after **every** phase change and after every plugin updat
 The kit is project-agnostic. Nothing is assumed about hosting, folder layout, WP-CLI, or test tooling until discovered here.
 
 1. Delegate *setup* to `wp-plugin-updater` (read-only discovery, changes nothing). It returns the detected hosting, plugin folder, WP-CLI command, protected paths, and test setup.
-2. **Do not ask the developer to review these values.** Save them straight to `SLA/test-config.json` (`project.configured: true`) and print one line, for example: `Detected: WordPress VIP, plugins in plugins/, WP-CLI via lando wp.`
-3. Ask a question **only** if something essential could not be found, and only that one thing (for example: how do you run WP-CLI locally?). Staging and production URLs are not asked here.
-4. Never write secrets to the config. Later runs skip Setup. If the saved values stop working (for example the WP-CLI command fails), say so in one line and redo the discovery.
+2. **Do not ask the developer to review these values.** Save them straight to `SLA/test-config.json` (`project.configured: true`) and print one line, for example: `Detected: hosting generic, plugins in plugins/, WP-CLI via lando wp.`
+3. Ask a question **only** if something essential could not be found, and only that one thing (for example: how do you run WP-CLI locally?). 
+4. Then ask for the **staging URL** and the **production URL**, once, one question each (the developer can answer *Skip / no staging* or *Skip / no production*). Save them to `environments.staging.url` and `environments.production.url`, or set `"skipped": true` on that environment. URLs are not secrets; they are stored only in the project's `SLA/test-config.json`, never in the kit. Later runs do not ask again.
+5. Never write secrets to the config. Later runs skip Setup. If the saved values stop working (for example the WP-CLI command fails), say so in one line and redo the discovery.
 
 ## Phase 1: PREPARATION
 
@@ -135,7 +136,7 @@ On **no**, do nothing in Git. Either way set phase `AWAITING_STAGING_DEPLOY`, th
 Only continue when the developer confirms the staging deploy is complete (a statement that it was *started* is not enough). Then:
 
 1. Read the report, state, and test config. Verify branch and commit info (`git log -1`; tell the developer if there are uncommitted changes).
-2. If `environments.staging.url` is empty, ask for it now (one question) and save it.
+2. If `environments.staging.skipped` is true, there is no staging: mark staging validation **Not Run (no staging environment)**, tell the developer in one line, and continue to *AWAITING_PRODUCTION_DEPLOY*. If `environments.staging.url` is empty and not skipped (an old project config), ask for it now (one question) and save it.
 3. Do not ask whether staging uses Basic Auth. Staging is accessed through the developer's logged-in Chrome session (see *Staging session* in Phase 4), which already holds any Basic Auth and WordPress login. Ask the developer to open the staging site in Chrome and tell you when it is open (one short message). Never ask for, type, or store credentials; there is no `local.env` step. Public GET checks (status, headers, `?ver=`, hreflang, sitemaps) run from that tab (for example same-origin `fetch` through the Chrome extension's JavaScript tool) instead of curl.
 4. Delegate *verify-deployment* to `wp-plugin-tester`: site reachable and, where public, the expected plugin versions are visible (asset `?ver=`, readme, generator tags). If not verifiable, report the limitation honestly and ask the developer how to proceed.
 5. Set phase `STAGING_VALIDATION`.
@@ -161,7 +162,7 @@ After tests: present executed, passed, failed, warnings, and manual-verification
 
 ## Phase 5: AWAITING_PRODUCTION_DEPLOY
 
-Only continue on explicit confirmation that production deployment is complete. If `environments.production.url` is empty, ask for it now (one question) and save it. Then set `PRODUCTION_VALIDATION`.
+Only continue on explicit confirmation that production deployment is complete. If `environments.production.skipped` is true, mark production validation **Not Run (no production URL)** and go to the final report. If `environments.production.url` is empty and not skipped (an old project config), ask for it now (one question) and save it. Then set `PRODUCTION_VALIDATION`.
 
 ## Phase 6: PRODUCTION_VALIDATION
 

@@ -2,7 +2,7 @@
 
 The workflow is identical on every host. Only these things change: where plugins live in the repo, how WP-CLI is run locally, what is platform-managed (protected), and how deploys happen (always done by the developer).
 
-Store the result in `SLA/test-config.json` under `project`. Detection is a suggestion: **always confirm with the developer**.
+Store the result in `SLA/test-config.json` under `project`. Detection is a suggestion: verify it with a harmless command (for example `wp core version`) and ask the developer only for what fails or cannot be found.
 
 ## Repository layouts
 
@@ -23,7 +23,7 @@ A directory is a plugin directory when its subfolders contain a PHP file with a 
 |---|---|
 | `client-mu-plugins/`, `vip-config/`, `.devcontainer` from `vip-codespaces`, remote `wpcomvip/*` | `vip` |
 | Remote `git.wpengine.com`, `wpengine` in remotes/docs, `wp-content/mu-plugins/wpengine-common` | `wpengine` |
-| Anything else | `generic` (ask) |
+| Anything else (Kinsta, Pantheon, Cloudways, shared hosting, self-hosted...) | `generic` |
 
 ## WordPress VIP (`vip`)
 
@@ -45,7 +45,13 @@ A directory is a plugin directory when its subfolders contain a PHP file with a 
 
 ## Generic (`generic`)
 
-Ask the developer for: plugin directory, how to run WP-CLI locally, protected paths, staging/production URLs, and how deploys are done.
+Works for any host. Discover first, then ask only for what could not be found, **one question at a time**:
+
+1. Plugin directory: look for a folder whose subfolders contain a PHP file with a `Plugin Name:` header.
+2. Local WP-CLI: try the order in `roles/updater.md` (Lando, DDEV, Docker, host `wp`).
+3. Protected paths: apply the safe defaults (core, themes, MU-plugins, drop-ins, `vendor/`). Do not ask.
+4. Staging and production URLs: asked once in Setup, skippable.
+5. Deploys are always done by the developer; never ask how, just say that the developer deploys.
 
 ## Required fields in `project`
 

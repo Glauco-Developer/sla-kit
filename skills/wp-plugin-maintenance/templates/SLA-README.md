@@ -1,6 +1,6 @@
 # SLA
 
-Monthly WordPress plugin maintenance data for this project. The workflow itself lives in the shared `sla-kit` (installed on each developer's machine), not in this repository.
+Monthly WordPress plugin maintenance data for this project. The workflow itself lives in the shared `sla-kit` (installed as a Claude Code plugin on each developer's machine), not in this repository.
 
 - `test-config.json`: project profile, URLs, plugin test pages.
 - `YYYY-MM/`: state and reports for each month.
