@@ -110,7 +110,7 @@ Restart Claude Code afterwards. Each run reports the version in use.
 
 ## What lives in each site
 
-Only the site's own data: `plugin-updates/test-config.json`, `plugin-updates/YYYY-MM/` (state and reports), and optionally `plugin-updates/playwright-project/` for tests that belong to that site alone.
+Only the site's own data, **committed with the site** so the repository keeps the maintenance history (the agent asks before committing it): `plugin-updates/test-config.json`, `plugin-updates/YYYY-MM/` (state and reports), and optionally `plugin-updates/playwright-project/` for tests that belong to that site alone.
 
 ## For maintainers
 

@@ -28,7 +28,7 @@ The developer wants this to be quicker than doing the updates by hand. Therefore
 
 ## Hard rules (never break)
 
-- Never deploy or merge, and never commit or push except in *Commit and push* below, after the developer says yes. Never force-push, amend, reset, or rebase. The developer deploys.
+- Never deploy or merge, and never commit or push except in *Commit and push* below and the *history commit* in *Finish*, each after the developer says yes. Never force-push, amend, reset, or rebase. The developer deploys.
 - Never update WordPress core, themes, MU-plugins, drop-ins, protected plugins, or any plugin that carries a **do-not-update notice** (see `references/project-discovery.md`, *Do-not-update notices*). Tell the developer about every such plugin and quote the notice. Never `wp plugin update --all`, never force flags, never destructive retries.
 - Never run updates or WP-CLI against staging or production. Production is read-only by default: no form submissions, no admin login, no state changes, except the opt-in *Production form test* in Phase 6, which needs the developer's explicit yes in that run. Staging admin access is allowed only through the developer's own logged-in Chrome session (see *Staging session*), never with passwords typed or stored by you.
 - Never prepare the commit message or ask for a staging deploy before Local Validation has run and its results are saved. Updated plugins that were never executed locally are reported honestly (Not Run / Manual Verification Required), never as Passed.
@@ -185,8 +185,13 @@ Tests needing anything beyond this are recorded as "staging-only" or "Manual Ver
 1b. Generate `plugin-updates/YYYY-MM/plugin-updates-summary.md` from the final report and state (template in `references/report-template.md`): short, plain language for non-technical stakeholders. No command output, logs, paths or secrets. Regenerate it whenever a plugin is updated later in the month (for example after a WordPress upgrade). Show it to the developer to share.
 2. Final state: `COMPLETED` if everything passed; `COMPLETED_WITH_WARNINGS` if any Warning/Not Verified/Manual item remains; `FAILED` if a production check failed.
 3. Show the final table (plugin, previous -> installed version) and remaining manual actions.
-4. If the report/state changed after the original commit, say they contain uncommitted changes and suggest (never run):
-   `docs(plugin-updates): update plugin maintenance report - YYYY-MM`
+4. **History commit.** The `plugin-updates/` folder (config, monthly state and reports) is meant to be **committed with the site**, so the repository keeps the maintenance history. Ask **one** question: *Commit the plugin-updates folder and push (Recommended)* / *Not now, I will do it*. On yes, run it yourself:
+   1. Confirm the current branch is the updates branch (never the base branch). If the updates branch was already merged, do not commit: tell the developer to include the folder in their next change.
+   2. Stage **only** `plugin-updates/` (`git add -- plugin-updates`). Its `.gitignore` already keeps artifacts, `local.env` and `node_modules` out. Show `git status --short` and stop if anything outside `plugin-updates/` is staged, or if a secret-looking file is staged.
+   3. Commit with exactly this message and the same no-AI-attribution rule as the plugin commit: `docs(plugin-updates): update plugin updates report - YYYY-MM`.
+   4. Plain `git push` (never force). Report the commit hash.
+   If the repository is public, say so before the question: the folder holds site URLs and test results.
+   Note for the developer: the folder is deployed together with the repository. It contains no secrets; if the deploy rules do not allow extra top-level folders, exclude `plugin-updates/` there.
 
 ## Pausing
 
