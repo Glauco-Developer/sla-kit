@@ -46,6 +46,13 @@ Local email delivery is Not Run (verified on staging).
 
 Results: Passed, Failed, Warning, Not Run, Not Verified, Manual Verification Required.
 
+### Local Save Test
+
+| Check | Result | Notes |
+|---|---|---|
+
+Results: Passed, Failed, Not Run (guard failed or disabled), Not Verified. State whether the test post was deleted.
+
 ### Form Notification Delivery
 
 | Form | Test identifier | Result | Notes |

@@ -45,6 +45,28 @@ Rules:
 6. Result: Inbox -> Passed. Spam/Junk -> Warning (call it out explicitly). Not found after timeout -> Failed. No mailbox access -> Not Verified, ask for manual verification.
 7. Never mark delivery Passed from the on-page confirmation alone.
 
+## Local save test
+
+Many updates break **saving**, not rendering (ACF field groups, Yoast metadata, block editor extensions). This is the only test that creates content, so it has strict guards.
+
+**Guard (all must hold, else mark the test Not Run with the reason and stop):**
+
+1. `testing.localContentTests` is not `false` in the config.
+2. `wp option get siteurl` has a host that is clearly local: `localhost`, `127.0.0.1`, `*.test`, `*.localhost`, `*.local`, `*.lndo.site`, `*.ddev.site`. Anything else, including staging and production URLs, is **not** local.
+3. The WP-CLI install is the project's own local copy (already confirmed during preparation).
+
+**Procedure (WP-CLI, no browser needed):**
+
+1. Create a draft: `wp post create --post_type=post --post_status=draft --post_title="WPU-TEST <YYYYMMDD-HHMM>" --porcelain`. Record its ID in `state.json` (`local.contentTest.postIds`) **before** doing anything else.
+2. If **ACF** (`advanced-custom-fields` or `advanced-custom-fields-pro`) was updated: find a field group that applies to posts (`acf_get_field_groups`), set a value on its first simple field with `update_field`, and read it back with `get_field`. If no field group applies to posts, try a post type it does apply to, else mark Not Verified.
+3. If **Yoast SEO** (`wordpress-seo`) was updated: set `_yoast_wpseo_title` and `_yoast_wpseo_metadesc` with `wp post meta update`, read them back.
+4. Re-save the post with `wp post update <ID> --post_content="WPU-TEST body"` (this fires the `save_post` hooks of every active plugin) and read it back with `wp post get`.
+5. Check the PHP/WP debug log for new fatals or errors that mention an updated plugin. New fatal or error = Failed; new deprecation notice = Warning.
+6. **Always clean up**, even after a failure: `wp post delete <ID> --force` for each ID recorded in step 1, then set `deleted: true`. Delete only posts this run created.
+7. Leftovers: at the start of the test, if the title prefix `WPU-TEST` exists from an interrupted run (`wp post list --s="WPU-TEST" --post_status=any`), delete those (local only) and say so.
+
+Results: Passed (saved, read back, no new errors), Failed (save error, wrong value read back, new fatal), Not Run (guard failed or setting is `false`), Not Verified (no applicable field group or no way to read back). With a browser available on local, the same post can also be opened in the block editor to check for console errors, but that is optional.
+
 ## Basic Auth for the Playwright suite (optional, terminal runs only)
 
 The terminal suite does not share the developer's Chrome session. For staging it needs `PLUGIN_UPDATES_BASIC_AUTH_USER` / `PLUGIN_UPDATES_BASIC_AUTH_PASSWORD` exported by the developer (never asked in chat, never written to files or logs). Without them, staging checks go through the Chrome session. Local and production need none.
@@ -60,7 +82,7 @@ Environment: the local dev site (`wp option get siteurl` via `project.wpCli`). O
 1. `wp plugin list --format=json`: updated plugins at `installedVersion`, active state unchanged from the inventory. Mismatch = Failed.
 2. Site, `wp-admin` login page and each updated plugin's admin screen (when it has one) return 200 with no fatal. Check the PHP error / `debug.log` of the dev environment for new errors mentioning the updated plugin paths. New fatal or error = Failed; new deprecation notice = Warning.
 3. Smoke tests on representative public pages against the local URL (dev certificates may be self-signed; allow that for local only).
-4. Plugin recipes from the table above, using local pages. Form plugins: submissions allowed locally without extra approval; verify confirmation and that the entry exists (the plugin's Entries/Submissions screen, or `wp gf` for Gravity Forms); notification delivery is **Not Run** locally. FacetWP: confirm the index status is built, and note `FACETWP-INDEX-ISSUE.md` if present. Inactive plugins are not activated automatically: mark them **Not Run** (inactive) unless the developer approves activating them locally.
+4. Run the *Local save test* (see above) when ACF, Yoast or any plugin that adds fields or editor features was updated. Then the plugin recipes from the table above, using local pages. Form plugins: submissions allowed locally without extra approval; verify confirmation and that the entry exists (the plugin's Entries/Submissions screen, or `wp gf` for Gravity Forms); notification delivery is **Not Run** locally. FacetWP: confirm the index status is built, and note `FACETWP-INDEX-ISSUE.md` if present. Inactive plugins are not activated automatically: mark them **Not Run** (inactive) unless the developer approves activating them locally.
 5. Local content may be empty or stale. Report a missing page as Not Verified, not Failed.
 
 ## Staging authenticated checks (developer's Chrome session)

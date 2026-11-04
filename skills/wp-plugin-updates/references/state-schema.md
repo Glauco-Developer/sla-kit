@@ -26,7 +26,7 @@ Non-sensitive only. Never store credentials, tokens, cookies, or mailbox content
       "notes": ""
     }
   ],
-  "local": { "status": "Not Run | Passed | Failed | Warning | Not Verified", "validatedAt": null, "results": [] },
+  "local": { "status": "Not Run | Passed | Failed | Warning | Not Verified", "validatedAt": null, "results": [], "contentTest": { "postIds": [], "deleted": false } },
   "staging": { "status": "Not Run | Passed | Failed | Warning | Not Verified", "deployConfirmedAt": null, "results": [] },
   "production": { "status": "Not Run | Passed | Failed | Warning | Not Verified", "deployConfirmedAt": null, "results": [] },
   "notifications": [],

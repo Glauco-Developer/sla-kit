@@ -21,6 +21,7 @@ This plugin gives you the careful version, without the hours.
 - **Updates one plugin at a time**, locally, with the exact versions recorded. Never `--all`, never force flags.
 - **Tests before anything ships.** A dedicated Playwright suite plus per-plugin checks (forms, search and filters, SEO metadata, language switching, PHP errors in the debug log).
 - **Form checks for the plugin your site actually uses.** It detects Gravity Forms, Contact Form 7, WPForms, Ninja Forms, Fluent Forms, Formidable and Forminator, finds the form pages, and tests rendering and required fields. With your approval, it submits a marked test entry on staging and checks the plugin's own record of the notification. Opening a mailbox (Inbox vs Spam/Junk) happens only if you ask.
+- **A local save test.** It creates a marked draft on your *local* site, saves it, fills ACF and Yoast fields, checks for errors, and deletes it. Updates that break saving are caught before anything is committed. It refuses to run on anything that is not clearly local.
 - **A clean commit** that lists only the updated plugins and their versions.
 - **Staging and production validation** after you deploy. Production is read-only by default.
 - **Two reports**: a full technical report and a one-page summary for stakeholders.

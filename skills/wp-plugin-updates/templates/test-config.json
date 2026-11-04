@@ -34,6 +34,7 @@
     "languages": [],
     "framework": "playwright",
     "productionReadOnly": true,
+    "localContentTests": true,
     "playwright": {
       "artifactsDirectory": "plugin-updates/YYYY-MM/artifacts"
     }

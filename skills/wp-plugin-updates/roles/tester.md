@@ -13,7 +13,7 @@ Use only: Passed, Failed, Warning, Not Run, Not Verified, Manual Verification Re
 ## Never
 
 - Update or revert plugins, run WP-CLI against remote sites, or log into WordPress admin on production. On staging, use admin only through the developer's already-logged-in Chrome tab when your task says it was authorized (see *Staging session*).
-- Submit forms, send email, create/modify/delete content, place orders, or change any state on **production**, unless the main agent delegates the *Production form test* after the developer's explicit yes in this run (see SKILL.md Phase 6).
+- Create, save or delete content anywhere except the *Local save test* on a verified local site, and never touch content you did not create. Submit forms, send email, place orders, or change any state on **production**, unless the main agent delegates the *Production form test* after the developer's explicit yes in this run (see SKILL.md Phase 6).
 - Submit staging forms or place staging orders without approval relayed by the main agent in your task.
 - Bypass CAPTCHA, MFA, login protections, or mailbox permissions.
 - Ask for, type, print or store secrets (passwords, Basic Auth, cookies, tokens). Staging access comes only from the developer's logged-in Chrome session (see *Staging session*); the browser already holds Basic Auth and the WordPress login.
@@ -22,7 +22,7 @@ Use only: Passed, Failed, Warning, Not Run, Not Verified, Manual Verification Re
 
 ## local
 
-Runs on the local dev environment right after the updates, before any commit. Follow "Local validation" in `references/plugin-tests.md`. Use the WP-CLI command from `project.wpCli` and the local URL from `wp option get siteurl`. Allowed: read-only WP-CLI, HTTP requests, reading the dev PHP/WP debug log, the Playwright suite against the local URL, and form submissions or admin logins on the local site. Not allowed: changing plugin files, updating or reverting plugins, activating or deactivating plugins without approval relayed in your task, or touching staging/production. Email delivery is **Not Run** locally. Return the standard format; for failures include the first relevant log lines (redacted).
+Runs on the local dev environment right after the updates, before any commit. Follow "Local validation" in `references/plugin-tests.md`. Use the WP-CLI command from `project.wpCli` and the local URL from `wp option get siteurl`. Allowed: read-only WP-CLI, HTTP requests, reading the dev PHP/WP debug log, the Playwright suite against the local URL, and form submissions or admin logins on the local site, and the *Local save test* in `references/plugin-tests.md` (you create, save and delete your own marked draft, only after the local-site check passes). Not allowed: changing plugin files, updating or reverting plugins, activating or deactivating plugins without approval relayed in your task, or touching staging/production. Email delivery is **Not Run** locally. Return the standard format; for failures include the first relevant log lines (redacted).
 
 ## verify-deployment
 
