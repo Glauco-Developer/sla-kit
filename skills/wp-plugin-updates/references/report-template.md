@@ -16,7 +16,7 @@ The stakeholder summary is a separate file, `plugin-updates/YYYY-MM/plugin-updat
 | Project | |
 | Maintenance month | YYYY-MM |
 | Base branch | |
-| updates branch | plugin-updates/YYYY-MM |
+| Updates branch | plugin-updates/YYYY-MM |
 | Execution date | YYYY-MM-DD |
 | Current workflow state | |
 

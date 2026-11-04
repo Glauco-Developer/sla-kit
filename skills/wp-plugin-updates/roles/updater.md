@@ -22,8 +22,8 @@ Read-only discovery for a project never configured. Change nothing. Do not ask f
 1. **Repository layout** (see "Repository layouts" in `project-discovery.md`): find where plugins live by searching for `wp-config.php`, `wp-content/plugins`, `app/plugins`, `plugins/*/` containing a PHP file with a `Plugin Name:` header, and `composer.json` (Bedrock/Composer). Derive `pluginsDir` (repo-relative) and `wordpressRoot`.
 2. **WP-CLI**: try in order and test with `wp core version` / `wp option get siteurl`: `.lando.yml` -> `lando wp`; `.ddev` -> `ddev wp`; `docker-compose*`/`.devcontainer` -> container exec; `wp` on the host (with `--path`). Propose the first that works. Then run the plugin-directory check from **prepare** step 3.
 3. **Protected**: the safe defaults in `project-discovery.md` plus: any `mu-plugins`, `*-mu-plugins`, drop-ins (`object-cache.php`, `db.php`, `advanced-cache.php`), themes, core, plugins ignored by `.gitignore`, and Composer-managed plugins.
-5. **Tests**: the kit tests are dedicated (`playwright/`) and never reuse other suites in the repository. Report whether `playwright/node_modules` (in the skill folder) exists. Do not install.
-6. **Project name**: from the repository directory or remote name.
+4. **Tests**: the kit tests are dedicated (`playwright/`) and never reuse other suites in the repository. Report whether `playwright/node_modules` (in the skill folder) exists. Do not install.
+5. **Project name**: from the repository directory or remote name.
 
 ## prepare
 
