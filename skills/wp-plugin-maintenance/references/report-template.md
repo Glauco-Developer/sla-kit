@@ -2,7 +2,7 @@
 
 Professional English. If the file already exists (for example a second run in the same month), **append** a new `## Maintenance Run N` section and keep earlier runs intact. Never delete history. Never include secrets.
 
-The short Jira version is a separate file, `SLA/YYYY-MM/plugin-updates-jira.md` (see the end of this template).
+The stakeholder summary is a separate file, `SLA/YYYY-MM/plugin-updates-summary.md` (see the end of this template).
 
 ```markdown
 # Plugin Updates - YYYY-MM
@@ -70,14 +70,35 @@ Results: Delivered to Inbox (Passed), Delivered to Spam/Junk (Warning), Not Foun
 ```
 
 Fill sections as phases complete; leave unreached sections as `Not Run`.
-## Short Jira version: `SLA/YYYY-MM/plugin-updates-jira.md`
+## Stakeholder summary: `SLA/YYYY-MM/plugin-updates-summary.md`
 
-Generated at Finish from the final plugin table. Only plugins with status Updated, nothing else (no notes, tests, skipped or manual items). Same template for every run:
+Generated at Finish. Written for non-technical readers (clients, project managers). One page at most. No command output, logs, file paths or secrets. Same template for every run:
 
 ```markdown
-# Plugin Updates - YYYY-MM
+# Plugin Maintenance Summary - YYYY-MM
+
+**Site:** <project name>
+**Result:** Completed | Completed with warnings | Blocked | Failed
+**Completed:** YYYY-MM-DD
+
+## Updated plugins
 
 | Plugin | Previous version | New version |
 |---|---|---|
 | <Name> | <old> | <new> |
+
+## Needs attention
+
+- <Plain-language item: a plugin that must be updated manually, a check that could not be verified, an open issue>
+- None
+
+## Validation
+
+| Environment | Outcome |
+|---|---|
+| Local | Passed / Passed with warnings / Not run |
+| Staging | Passed / Passed with warnings / Not run |
+| Production | Passed / Passed with warnings / Not run |
+
+<One or two sentences: overall assessment and any recommended follow-up.>
 ```

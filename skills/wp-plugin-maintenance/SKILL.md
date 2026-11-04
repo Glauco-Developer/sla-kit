@@ -43,7 +43,7 @@ The developer wants this to be quicker than doing the updates by hand. Therefore
 |---|---|
 | `SLA/YYYY-MM/state.json` | Workflow state (non-sensitive). Schema: `references/state-schema.md` |
 | `SLA/YYYY-MM/plugin-updates-full.md` | Full monthly report (all phases, tests, notes). Template: `references/report-template.md` |
-| `SLA/YYYY-MM/plugin-updates-jira.md` | Short Jira version: only the table of updated plugins, previous -> new version. Template: `references/report-template.md` |
+| `SLA/YYYY-MM/plugin-updates-summary.md` | Final stakeholder summary: result, updated plugins (previous -> new version), what needs attention, validation outcome per environment. Plain language, no technical detail. Template: `references/report-template.md` |
 | `SLA/test-config.json` | Per-project profile (filled by Setup), URLs, plugin test pages, Playwright and Gravity Forms settings |
 | `SLA/playwright-project/` | Optional Playwright specs that belong only to this project (kit specs are never edited per project) |
 | `references/hosting-profiles.md` | Detection hints and notes per hosting provider (VIP and WP Engine as examples, `generic` for everything else) |
@@ -82,7 +82,7 @@ Delegate to `wp-plugin-updater` (task: *prepare*). It must stop and report on an
 3. Verify this is the correct WordPress repository (plugin directory exists, WP-CLI identifies the install). Then ask **one** go/no-go question that also confirms the base branch: "Start the YYYY-MM maintenance for <project> from branch <branch>?" (Start / Cancel).
 4. `git fetch`, then `git pull --ff-only`. If it cannot fast-forward or conflicts exist, **stop**. Never force, reset, rebase, or discard.
 5. Branch `sla/plugins-updates-YYYY-MM`. If it exists locally or on the remote: do not overwrite, inspect it, and ask whether to resume it. Otherwise `git checkout -b`.
-6. Create the month folder `SLA/YYYY-MM/` with `state.json` and the report skeleton `plugin-updates-full.md` (the short `plugin-updates-jira.md` is generated at Finish). All per-run files (state, report, artifacts) live in that folder; only `SLA/test-config.json` and `SLA/README.md` stay at the `SLA/` root. Set phase `LOCAL_UPDATES`.
+6. Create the month folder `SLA/YYYY-MM/` with `state.json` and the report skeleton `plugin-updates-full.md` (the stakeholder summary `plugin-updates-summary.md` is generated at Finish). All per-run files (state, report, artifacts) live in that folder; only `SLA/test-config.json` and `SLA/README.md` stay at the `SLA/` root. Set phase `LOCAL_UPDATES`.
 
 Unexpected branch, overwritable changes, non-ff pull, unidentifiable WordPress, or unresolved conflicts set the final state `BLOCKED` with the reason.
 
@@ -180,7 +180,7 @@ Tests needing anything beyond this are recorded as "staging-only" or "Manual Ver
 ## Finish
 
 1. Update `SLA/YYYY-MM/plugin-updates-full.md`: final versions, skipped, failed/manual, staging and production results, notification results, Spam/Junk warnings, outstanding issues, final status, completion timestamp.
-1b. Generate `SLA/YYYY-MM/plugin-updates-jira.md` from the final plugin table (template in `references/report-template.md`): only plugins with status Updated, columns Plugin, Previous version, New version. Nothing else, no notes or test results. Regenerate it whenever a plugin is updated later in the month (for example Yoast after a WP upgrade). Show it to the developer to paste into Jira.
+1b. Generate `SLA/YYYY-MM/plugin-updates-summary.md` from the final report and state (template in `references/report-template.md`): short, plain language for non-technical stakeholders. No command output, logs, paths or secrets. Regenerate it whenever a plugin is updated later in the month (for example after a WordPress upgrade). Show it to the developer to share.
 2. Final state: `COMPLETED` if everything passed; `COMPLETED_WITH_WARNINGS` if any Warning/Not Verified/Manual item remains; `FAILED` if a production check failed.
 3. Show the final table (plugin, previous -> installed version) and remaining manual actions.
 4. If the report/state changed after the original commit, say they contain uncommitted changes and suggest (never run):
