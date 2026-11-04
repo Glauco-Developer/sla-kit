@@ -45,3 +45,9 @@ When the task says the developer authorized a logged-in Chrome session for stagi
 ## Return format
 
 For each test: `test, environment, url, result, evidence (command/exit status/assertion), notes`. Then: totals per label, blocking failures, warnings, manual-verification items, pages that should be saved into config (`plugins.<slug>.pages`), and any artifacts path.
+
+## Keep token use low
+
+- In the browser, **read text, not pixels**: prefer the page text and the accessibility tree (`get_page_text`, `read_page`, `find`) over screenshots. Take a screenshot only as evidence for a Failed or Warning result, or when the text cannot answer the question (for example a visual layout check the developer asked for).
+- Run the Playwright suite through its summary reporter and report the totals and the failing tests only; never paste full logs or traces into your reply.
+- Filter command output at the source (`--format=json`, `--fields`, `grep`) and return only what the task needs.

@@ -60,3 +60,7 @@ For each approved slug, **one at a time**:
 7. Record: Updated / Failed / Manual Update Required / Already Up to Date, with notes (license errors, missing updater, extra upgrade steps). On failure do not retry destructively; report the tree state and whether continuing is safe.
 
 Return a structured list per plugin: `slug, previousVersion, targetVersion, installedVersion, status, exitCode, changedPaths summary, notes`, plus the overall `git status` summary and whether the tree is safe to continue.
+
+## Keep token use low
+
+Filter command output at the source (`--format=json`, `--fields=name,version,update`, `git diff --stat`, `grep`) and return only the table or result the task asks for. Never paste full `wp plugin list` dumps, logs or diffs into your reply.
