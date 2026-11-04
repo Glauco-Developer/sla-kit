@@ -20,7 +20,7 @@ This plugin gives you the careful version, without the hours.
 
 - **Updates one plugin at a time**, locally, with the exact versions recorded. Never `--all`, never force flags.
 - **Tests before anything ships.** A dedicated Playwright suite plus per-plugin checks (forms, search and filters, SEO metadata, language switching, PHP errors in the debug log).
-- **Gravity Forms notification checks**: it verifies the notification email, including Spam/Junk placement, when a mailbox session is available, and marks it Manual Verification Required when not.
+- **Form checks for the plugin your site actually uses.** It detects Gravity Forms, Contact Form 7, WPForms, Ninja Forms, Fluent Forms, Formidable and Forminator, finds the form pages, and tests rendering and required fields. With your approval, it submits a marked test entry on staging and checks the plugin's own record of the notification. Opening a mailbox (Inbox vs Spam/Junk) happens only if you ask.
 - **A clean commit** that lists only the updated plugins and their versions.
 - **Staging and production validation** after you deploy. Production is read-only by default.
 - **Two reports**: a full technical report and a one-page summary for stakeholders.
@@ -54,6 +54,7 @@ This agent is deliberately limited. It will **never**:
 
 - deploy, merge, force-push, reset or rebase,
 - update WordPress core, themes, MU-plugins, drop-ins or protected plugins,
+- update a plugin that carries a "do not update" notice (in its header, its files or your project docs). It is left out and you are told exactly what the notice says and where it was found,
 - run updates or WP-CLI against staging or production,
 - ask for, type, store or print passwords, tokens or cookies,
 - claim a test passed without actually running it.
@@ -84,6 +85,19 @@ Requirements: Git, Node.js, and a local environment for the site (Lando, DDEV, D
 2. Say: **Start the monthly WordPress plugin updates.**
 
 On a site that has never used it, the first run does a one-time setup: it detects the plugin folder and WP-CLI command by itself, then asks for the staging and production URLs once (you can skip either). Everything lives in a `plugin-updates/` folder inside that site. Nothing from this plugin is ever copied into your repository.
+
+## What you need open
+
+Most of the run is automatic and needs nothing from you but a yes. Staging checks that need a login use **your own Chrome**:
+
+| For | You need |
+|---|---|
+| Local updates and tests | Nothing in the browser. Just your local site running |
+| Staging admin checks and form tests | Chrome open with the **Claude in Chrome** extension installed and signed in, the staging site open in a tab and logged in to wp-admin (including Basic Auth, if the site has it) |
+| Mailbox check (optional) | Your webmail open and logged in, in another tab, preferably a dedicated test mailbox |
+| Production | Nothing. Public read-only checks. The optional form test uses the same Chrome session |
+
+The agent never asks for or types your passwords, never bypasses MFA or CAPTCHA, and only uses the tabs you opened. If you prefer not to open Chrome, choose "Public tests only": the checks that need a login are listed as Manual Verification Required instead.
 
 ## Update
 

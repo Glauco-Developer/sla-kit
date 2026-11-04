@@ -41,7 +41,9 @@ Run, adapted to `project.wpCli`:
 - `wp plugin list --format=json`
 - `wp plugin list --update=available --format=json`
 
-Classify each plugin: updatable / MU or dropin (info only) / protected / premium without updater / custom (no remote source) / network-managed. Return a table with name, slug, current version, available version, active status, update availability, and the class. Read-only; do not modify files.
+Classify each plugin: updatable / MU or dropin (info only) / protected / **do-not-update notice** / premium without updater / custom (no remote source) / network-managed.
+
+**Do-not-update scan (read-only, every plugin with an update available).** Look for a notice that says the plugin must not be updated, in any language: (1) the `Update URI: false` header in the main plugin file; (2) comments in the main plugin file and root-level `README*`, `*.md`, `*.txt` or files named like `DO-NOT-UPDATE*` in the plugin folder; (3) the project's own docs (`README*`, `CONTRIBUTING*`, `CLAUDE.md`, `AGENTS.md`, `docs/`, comments in `.gitignore` or `composer.json`) mentioning the plugin. Typical wording: "do not update", "don't upgrade", "customized/modified/patched version", "local changes", "não atualizar", "no actualizar", "ne pas mettre à jour", "nicht aktualisieren". Judge the context: a changelog line such as "do not update settings" is not a notice, but when it is unclear, treat it as a notice and let the main agent ask. For each hit return the plugin slug, the exact quoted text and the file path. Never edit or delete the notice. Return a table with name, slug, current version, available version, active status, update availability, and the class. Read-only; do not modify files.
 
 Never leave the version columns as `-`. For every plugin (including premium, inactive, custom, or without an updater) read the installed version from `wp plugin list`, or from the `Version:` header of the main plugin file if WP-CLI does not report it. For the available version, write the number if known (WP-CLI or the wp.org API); otherwise write `unknown` and put the vendor from `Plugin URI` / `Author` in the notes ("latest only on vendor site"). Distinguish *premium* (vendor-licensed) from *custom/in-house* (placeholder author, no Plugin URI, no remote source): custom plugins are Skipped, not Manual Update Required.
 
@@ -49,7 +51,7 @@ Never leave the version columns as `-`. For every plugin (including premium, ina
 
 For each approved slug, **one at a time**:
 
-1. Skip and report if the slug is MU, drop-in, protected, or not in the approved list.
+1. Skip and report if the slug is MU, drop-in, protected, carries a do-not-update notice (unless the main agent relays the developer's explicit "Update anyway"), or is not in the approved list.
 2. Record installed version (`wp plugin get <slug> --field=version`) and target version.
 3. `git status --porcelain` baseline.
 4. `wp plugin update <slug>`; capture exit code and output (redact anything secret-looking).

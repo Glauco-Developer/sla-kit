@@ -45,11 +45,23 @@ Discover first, then ask only for what could not be found, **one question at a t
 
 `allowedBaseBranches` must not be widened by the agent; only the developer may edit it deliberately.
 
+## Do-not-update notices
+
+Some companies mark a plugin that must stay on its current version (customized, patched, pinned for compatibility) with a written notice instead of a tool setting. Before proposing any update, scan for it (read-only):
+
+- `Update URI: false` in the main plugin file header.
+- Comments in the main plugin file, and root-level `README*`, `*.md`, `*.txt` or `DO-NOT-UPDATE*` files in the plugin folder.
+- The project's own docs and config (`README*`, `CONTRIBUTING*`, `CLAUDE.md`, `AGENTS.md`, `docs/`, comments in `.gitignore` or `composer.json`) mentioning the plugin.
+- Wording in any language: "do not update", "don't upgrade", "customized/modified/patched version", "local changes", "não atualizar", "no actualizar", "ne pas mettre à jour", "nicht aktualisieren".
+
+A plugin with a notice is **never updated automatically**. It is reported with the quoted notice and its location, listed under *Skipped* in the report with the notice in Notes, and the developer is told in plain words. When the wording is ambiguous, treat it as a notice and ask. Only the developer's explicit "Update anyway" overrides it, for that run.
+
 ## Plugin classes
 
 | Class | Handling |
 |---|---|
 | wp.org / updater-capable | `wp plugin update <slug>` |
 | Premium with license key (for example ACF Pro, Gravity Forms, SearchWP, Relevanssi Premium) | Try the individual WP-CLI update only if the update is listed as available. If the license/updater is missing, mark **Manual Update Required**; do not hack around it |
+| Carries a do-not-update notice | **Skipped**: quote the notice, tell the developer, never update unless the developer explicitly overrides |
 | Custom / in-house | Not updatable remotely: **Skipped** (no update source) |
 | Composer-managed | Manual handling via Composer, report as such |

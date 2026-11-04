@@ -46,12 +46,12 @@ Local email delivery is Not Run (verified on staging).
 
 Results: Passed, Failed, Warning, Not Run, Not Verified, Manual Verification Required.
 
-### Gravity Forms Notification Delivery
+### Form Notification Delivery
 
 | Form | Test identifier | Result | Notes |
 |---|---|---|---|
 
-Results: Delivered to Inbox (Passed), Delivered to Spam/Junk (Warning), Not Found After Timeout (Failed), Mailbox Access Unavailable (Not Verified).
+Results: Dispatch Confirmed by the plugin (Passed, inbox delivery not checked), Delivered to Inbox (Passed), Delivered to Spam/Junk (Warning), Not Found After Timeout (Failed), Mailbox Access Unavailable (Not Verified).
 
 ### Production Validation
 
