@@ -25,7 +25,7 @@ This plugin gives you the careful version, without the hours.
 - **Staging and production validation** after you deploy. Production is read-only by default.
 - **Two reports**: a full technical report and a one-page summary for stakeholders.
 - **Resumable.** Close the laptop mid-run, come back tomorrow, say "resume plugin updates" and it continues exactly where it stopped, without repeating any update.
-- **Works with any host.** WordPress VIP and WP Engine have built-in profiles. Everything else (Kinsta, Pantheon, Cloudways, shared hosting, self-hosted) is detected from your repository and local setup.
+- **Works with any host.** The plugin folder, WP-CLI command and protected paths are detected from your repository and local setup, so it does not depend on where the site is hosted.
 
 ## How it works
 
@@ -83,7 +83,7 @@ Requirements: Git, Node.js, and a local environment for the site (Lando, DDEV, D
 1. Open the site's repository on its base branch (`main`, `master` or `production`) with a clean working tree.
 2. Say: **Start the monthly WordPress plugin updates.**
 
-On a site that has never used it, the first run does a one-time setup: it detects the hosting, plugin folder and WP-CLI command by itself, then asks for the staging and production URLs once (you can skip either). Everything lives in a `plugin-updates/` folder inside that site. Nothing from this plugin is ever copied into your repository.
+On a site that has never used it, the first run does a one-time setup: it detects the plugin folder and WP-CLI command by itself, then asks for the staging and production URLs once (you can skip either). Everything lives in a `plugin-updates/` folder inside that site. Nothing from this plugin is ever copied into your repository.
 
 ## Update
 
@@ -106,7 +106,7 @@ Only the site's own data: `plugin-updates/test-config.json`, `plugin-updates/YYY
 skills/wp-plugin-updates/
   SKILL.md          the workflow (phases, rules)
   roles/            instructions for the two roles: updater and tester
-  references/       hosting profiles, plugin test recipes, report and state formats
+  references/       project discovery, plugin test recipes, report and state formats
   playwright/       shared test suite (needs PLUGIN_UPDATES_PROJECT_DIR = project root)
   templates/        files created in a new site's plugin-updates/ folder
 agents/             thin subagent files that point to roles/
@@ -118,7 +118,7 @@ Edit the files, bump the version in `.claude-plugin/plugin.json` and `skills/wp-
 claude --plugin-dir /path/to/wp-plugin-updates
 ```
 
-Contributions are welcome: new hosting profiles, new per-plugin test recipes and bug reports.
+Contributions are welcome: new per-plugin test recipes and bug reports.
 
 ## Remove
 

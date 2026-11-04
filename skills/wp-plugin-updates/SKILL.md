@@ -1,6 +1,6 @@
 ---
 name: wp-plugin-updates
-description: Monthly WordPress plugin updates workflow for any hosting provider. Use when the developer asks to start, resume, or continue monthly plugin updates, plugin updates, staging/production validation after plugin updates, or the plugin updates report. Everything runs locally; staging and production are only tested, never updated directly.
+description: Monthly WordPress plugin updates workflow on any host. Use when the developer asks to start, resume, or continue monthly plugin updates, plugin updates, staging/production validation after plugin updates, or the plugin updates report. Everything runs locally; staging and production are only tested, never updated directly.
 ---
 
 # WordPress Plugin Updates
@@ -21,7 +21,7 @@ Installed as a plugin, the agents may appear with a prefix (for example `wp-plug
 The developer wants this to be quicker than doing the updates by hand. Therefore:
 
 - **One question at a time.** Never send a list of questions or a table of values to confirm. Wait for the answer before the next question.
-- **Ask only what cannot be discovered or safely defaulted.** Never ask about protected paths, plugin classes, test tooling, hosting, or WP-CLI details: detect them, apply the safe rules, and mention the result in one line.
+- **Ask only what cannot be discovered or safely defaulted.** Never ask about protected paths, plugin classes, test tooling, or WP-CLI details: detect them, apply the safe rules, and mention the result in one line.
 - **Offer choices, recommended first** (use the tool's question UI when it has one, such as AskUserQuestion; otherwise a short numbered list). Always include a cheap way out ("Skip", "Mark as manual").
 - **Ask just in time**, at the step that needs the answer (a plugin's test page when that plugin is tested). The only exception is the staging and production URLs, asked once during Setup, never up front.
 - Keep messages short: result first, details only on request.
@@ -46,7 +46,7 @@ The developer wants this to be quicker than doing the updates by hand. Therefore
 | `plugin-updates/YYYY-MM/plugin-updates-summary.md` | Final stakeholder summary: result, updated plugins (previous -> new version), what needs attention, validation outcome per environment. Plain language, no technical detail. Template: `references/report-template.md` |
 | `plugin-updates/test-config.json` | Per-project profile (filled by Setup), URLs, plugin test pages, Playwright and Gravity Forms settings |
 | `plugin-updates/playwright-project/` | Optional Playwright specs that belong only to this project (kit specs are never edited per project) |
-| `references/hosting-profiles.md` | Detection hints and notes per hosting provider (VIP and WP Engine as examples, `generic` for everything else) |
+| `references/project-discovery.md` | How the project layout, WP-CLI and protected paths are discovered |
 | `references/plugin-tests.md` | Per-plugin test recipes |
 
 Write state and report after **every** phase change and after every plugin update, so an interruption loses nothing.
@@ -66,10 +66,10 @@ Write state and report after **every** phase change and after every plugin updat
 
 ## Setup (first run in any project)
 
-The kit is project-agnostic. Nothing is assumed about hosting, folder layout, WP-CLI, or test tooling until discovered here.
+The kit is project-agnostic. Nothing is assumed about folder layout, WP-CLI, or test tooling until discovered here.
 
-1. Delegate *setup* to `wp-plugin-updater` (read-only discovery, changes nothing). It returns the detected hosting, plugin folder, WP-CLI command, protected paths, and test setup.
-2. **Do not ask the developer to review these values.** Save them straight to `plugin-updates/test-config.json` (`project.configured: true`) and print one line, for example: `Detected: hosting generic, plugins in plugins/, WP-CLI via lando wp.`
+1. Delegate *setup* to `wp-plugin-updater` (read-only discovery, changes nothing). It returns the plugin folder, WP-CLI command, protected paths, and test setup.
+2. **Do not ask the developer to review these values.** Save them straight to `plugin-updates/test-config.json` (`project.configured: true`) and print one line, for example: `Detected: plugins in plugins/, WP-CLI via lando wp.`
 3. Ask a question **only** if something essential could not be found, and only that one thing (for example: how do you run WP-CLI locally?). 
 4. Then ask for the **staging URL** and the **production URL**, once, one question each (the developer can answer *Skip / no staging* or *Skip / no production*). Save them to `environments.staging.url` and `environments.production.url`, or set `"skipped": true` on that environment. URLs are not secrets; they are stored only in the project's `plugin-updates/test-config.json`, never in the kit. Later runs do not ask again.
 5. Never write secrets to the config. Later runs skip Setup. If the saved values stop working (for example the WP-CLI command fails), say so in one line and redo the discovery.
