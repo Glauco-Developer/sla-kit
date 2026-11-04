@@ -30,7 +30,7 @@ if (testing.sitemap !== false) {
 }
 
 test('404 for an unknown url', async ({ request }) => {
-  const res = await request.get(`/sla-nonexistent-${Date.now()}/`);
+  const res = await request.get(`/nonexistent-${Date.now()}/`);
   expect(res.status()).toBe(404);
 });
 

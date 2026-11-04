@@ -21,8 +21,8 @@
       "skipped": false,
       "basicAuth": {
         "enabled": false,
-        "usernameEnv": "SLA_STAGING_BASIC_AUTH_USER",
-        "passwordEnv": "SLA_STAGING_BASIC_AUTH_PASSWORD"
+        "usernameEnv": "PLUGIN_UPDATES_STAGING_BASIC_AUTH_USER",
+        "passwordEnv": "PLUGIN_UPDATES_STAGING_BASIC_AUTH_PASSWORD"
       }
     },
     "production": {
@@ -36,7 +36,7 @@
     "framework": "playwright",
     "productionReadOnly": true,
     "playwright": {
-      "artifactsDirectory": "SLA/YYYY-MM/artifacts"
+      "artifactsDirectory": "plugin-updates/YYYY-MM/artifacts"
     }
   }
 }

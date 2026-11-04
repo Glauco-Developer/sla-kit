@@ -1,9 +1,9 @@
-// Writes a compact summary the agent reads instead of the full log: SLA/<month>/artifacts/playwright-summary.json.
-// Labels follow the SLA workflow: Passed, Failed, Warning, Not Run.
+// Writes a compact summary the agent reads instead of the full log: plugin-updates/<month>/artifacts/playwright-summary.json.
+// Labels follow the workflow: Passed, Failed, Warning, Not Run.
 const fs = require('fs');
 const path = require('path');
 
-class SlaSummary {
+class Summary {
   constructor() { this.results = []; }
   onTestEnd(test, result) {
     const warnings = test.annotations.filter((a) => a.type === 'warning').map((a) => a.description);
@@ -14,16 +14,16 @@ class SlaSummary {
   }
   onEnd() {
     const count = (s) => this.results.filter((r) => r.status === s).length;
-    const month = process.env.SLA_MONTH || 'artifacts';
-    const out = path.join(process.env.SLA_PROJECT_DIR, 'SLA', month, 'artifacts', 'playwright-summary.json');
+    const month = process.env.PLUGIN_UPDATES_MONTH || 'artifacts';
+    const out = path.join(process.env.PLUGIN_UPDATES_PROJECT_DIR, 'plugin-updates', month, 'artifacts', 'playwright-summary.json');
     const summary = {
-      baseUrl: process.env.SLA_BASE_URL,
+      baseUrl: process.env.PLUGIN_UPDATES_BASE_URL,
       totals: { Passed: count('Passed'), Warning: count('Warning'), Failed: count('Failed'), 'Not Run': count('Not Run') },
       results: this.results.filter((r) => r.status !== 'Passed'),
     };
     fs.mkdirSync(path.dirname(out), { recursive: true });
     fs.writeFileSync(out, JSON.stringify(summary, null, 2));
-    console.log(`SLA summary: ${JSON.stringify(summary.totals)} -> ${out}`);
+    console.log(`Summary: ${JSON.stringify(summary.totals)} -> ${out}`);
   }
 }
-module.exports = SlaSummary;
+module.exports = Summary;

@@ -1,11 +1,11 @@
 {
-  "name": "sla-kit",
+  "name": "wp-plugin-updates",
   "owner": { "name": "Glauco-Developer" },
   "plugins": [
     {
-      "name": "sla-kit",
+      "name": "wp-plugin-updates",
       "source": "./",
-      "description": "Monthly WordPress plugin maintenance (SLA) workflow: local updates, Playwright validation, staging/production checks and reports."
+      "description": "Monthly WordPress plugin updates workflow: local updates, Playwright validation, staging/production checks and reports."
     }
   ]
 }

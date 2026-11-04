@@ -1,8 +1,8 @@
 # Plugin test recipes
 
-Used by `wp-plugin-tester`. Always: use the dedicated SLA Playwright suite (the kit's `playwright/` folder, plus this project's own specs in `SLA/playwright-project/`); never reuse or mix with other suites in the project. Plain page checks can be added there freely; anything bigger needs approval. Always run smoke tests (homepage plus a few representative public pages; HTTP 200, `h1`, non-empty title, no obvious console/asset errors).
+Used by `wp-plugin-tester`. Always: use the dedicated Playwright suite (the kit's `playwright/` folder, plus this project's own specs in `plugin-updates/playwright-project/`); never reuse or mix with other suites in the project. Plain page checks can be added there freely; anything bigger needs approval. Always run smoke tests (homepage plus a few representative public pages; HTTP 200, `h1`, non-empty title, no obvious console/asset errors).
 
-Pages come from `SLA/test-config.json` -> `plugins.<slug>.pages`. If missing and the recipe says "ask", return `NEEDS_INPUT` and the main agent saves the answer.
+Pages come from `plugin-updates/test-config.json` -> `plugins.<slug>.pages`. If missing and the recipe says "ask", return `NEEDS_INPUT` and the main agent saves the answer.
 
 | Plugin | Pages | Tests |
 |---|---|---|
@@ -17,7 +17,7 @@ Pages come from `SLA/test-config.json` -> `plugins.<slug>.pages`. If missing and
 ## Gravity Forms notification check
 
 1. Staging only, after explicit approval to submit.
-2. Test values include a unique id, e.g. `SLA-YYYYMMDD-HHMM-<random>`, and a clearly marked test name.
+2. Test values include a unique id, e.g. `WPU-YYYYMMDD-HHMM-<random>`, and a clearly marked test name.
 3. Read the notification recipient from `plugins.gravityforms.notification` in config (mailbox URL and recipient). If missing, `NEEDS_INPUT`.
 4. Open the mailbox in the browser using an **existing authenticated session** or a flow the developer approves. Never bypass MFA, CAPTCHA, or permissions; never enter passwords found anywhere.
 5. Search Inbox for the unique id; if absent, search Spam/Junk. Retry every `retryIntervalSeconds` until `timeoutSeconds`.
@@ -27,7 +27,7 @@ Pages come from `SLA/test-config.json` -> `plugins.<slug>.pages`. If missing and
 
 ## Basic Auth for the Playwright suite (optional, terminal runs only)
 
-The terminal suite does not share the developer's Chrome session. For staging it needs `SLA_BASIC_AUTH_USER` / `SLA_BASIC_AUTH_PASSWORD` exported by the developer (never asked in chat, never written to files or logs). Without them, staging checks go through the Chrome session. Local and production need none.
+The terminal suite does not share the developer's Chrome session. For staging it needs `PLUGIN_UPDATES_BASIC_AUTH_USER` / `PLUGIN_UPDATES_BASIC_AUTH_PASSWORD` exported by the developer (never asked in chat, never written to files or logs). Without them, staging checks go through the Chrome session. Local and production need none.
 
 ## Production restrictions
 

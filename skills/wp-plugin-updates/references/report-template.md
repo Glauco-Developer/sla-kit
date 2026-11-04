@@ -1,8 +1,8 @@
-# Report template: `SLA/YYYY-MM/plugin-updates-full.md`
+# Report template: `plugin-updates/YYYY-MM/plugin-updates-full.md`
 
 Professional English. If the file already exists (for example a second run in the same month), **append** a new `## Maintenance Run N` section and keep earlier runs intact. Never delete history. Never include secrets.
 
-The stakeholder summary is a separate file, `SLA/YYYY-MM/plugin-updates-summary.md` (see the end of this template).
+The stakeholder summary is a separate file, `plugin-updates/YYYY-MM/plugin-updates-summary.md` (see the end of this template).
 
 ```markdown
 # Plugin Updates - YYYY-MM
@@ -17,7 +17,7 @@ The stakeholder summary is a separate file, `SLA/YYYY-MM/plugin-updates-summary.
 | Maintenance month | YYYY-MM |
 | Hosting | |
 | Base branch | |
-| SLA branch | sla/plugins-updates-YYYY-MM |
+| updates branch | plugin-updates/YYYY-MM |
 | Execution date | YYYY-MM-DD |
 | Current workflow state | |
 
@@ -70,7 +70,7 @@ Results: Delivered to Inbox (Passed), Delivered to Spam/Junk (Warning), Not Foun
 ```
 
 Fill sections as phases complete; leave unreached sections as `Not Run`.
-## Stakeholder summary: `SLA/YYYY-MM/plugin-updates-summary.md`
+## Stakeholder summary: `plugin-updates/YYYY-MM/plugin-updates-summary.md`
 
 Generated at Finish. Written for non-technical readers (clients, project managers). One page at most. No command output, logs, file paths or secrets. Same template for every run:
 

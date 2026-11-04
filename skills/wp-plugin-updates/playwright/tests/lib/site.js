@@ -1,8 +1,8 @@
-// Shared helpers. Everything project-specific comes from SLA/test-config.json, never from the tests.
+// Shared helpers. Everything project-specific comes from plugin-updates/test-config.json, never from the tests.
 const path = require('path');
-const projectDir = process.env.SLA_PROJECT_DIR;
-if (!projectDir) throw new Error('SLA_PROJECT_DIR is not set (path of the WordPress project root)');
-const config = require(path.join(projectDir, 'SLA', 'test-config.json'));
+const projectDir = process.env.PLUGIN_UPDATES_PROJECT_DIR;
+if (!projectDir) throw new Error('PLUGIN_UPDATES_PROJECT_DIR is not set (path of the WordPress project root)');
+const config = require(path.join(projectDir, 'plugin-updates', 'test-config.json'));
 
 const testing = config.testing || {};
 const plugins = config.plugins || {};

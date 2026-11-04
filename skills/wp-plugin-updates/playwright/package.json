@@ -1,0 +1,7 @@
+{
+  "name": "plugin-updates-playwright",
+  "private": true,
+  "description": "Playwright checks dedicated to the monthly WordPress plugin updates",
+  "scripts": { "test": "playwright test" },
+  "devDependencies": { "@playwright/test": "1.49.1" }
+}

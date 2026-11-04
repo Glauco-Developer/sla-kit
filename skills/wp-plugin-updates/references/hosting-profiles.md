@@ -2,7 +2,7 @@
 
 The workflow is identical on every host. Only these things change: where plugins live in the repo, how WP-CLI is run locally, what is platform-managed (protected), and how deploys happen (always done by the developer).
 
-Store the result in `SLA/test-config.json` under `project`. Detection is a suggestion: verify it with a harmless command (for example `wp core version`) and ask the developer only for what fails or cannot be found.
+Store the result in `plugin-updates/test-config.json` under `project`. Detection is a suggestion: verify it with a harmless command (for example `wp core version`) and ask the developer only for what fails or cannot be found.
 
 ## Repository layouts
 
@@ -32,7 +32,7 @@ A directory is a plugin directory when its subfolders contain a PHP file with a 
 - Local WP-CLI: `vip dev-env exec --slug <slug> -- wp ...`, Lando (`lando wp ...`), or Codespaces (`wp ...`). The environment must mount **this repo's** `plugins/` directory.
 - Plugins are committed to Git, so every update produces a diff in `plugins/<slug>/`.
 - Deploy (developer): merge/push to the environment branch (e.g. `develop`/`preprod`/`production`). Staging is typically the pre-production environment.
-- Extra directories (`SLA/`) is not mounted by VIP.
+- Extra directories (`plugin-updates/`) is not mounted by VIP.
 
 ## WP Engine (`wpengine`)
 
@@ -40,7 +40,7 @@ A directory is a plugin directory when its subfolders contain a PHP file with a 
 - Protected: `wp-content/mu-plugins/` (WP Engine managed), drop-ins, WP Engine's disallowed-plugin list, and WordPress core (WP Engine manages core updates).
 - Local WP-CLI: LocalWP shell, Lando, DDEV, Docker, or `wp` on the host. The environment must use **this repo's** plugin directory (symlink/mount); confirm before updating.
 - Deploy (developer): `git push` to the WP Engine environment remote, SFTP, or CI. Remind the developer to purge caches after deploy. If WP Engine Smart Plugin Manager or auto-updates are enabled on the server, tell the developer, since server-side updates can cause version drift.
-- WP Engine Git push deploys what is in the repo. Check that `SLA/` is acceptable to deploy, or are excluded by the project's deploy rules. They contain no secrets.
+- WP Engine Git push deploys what is in the repo. Check that `plugin-updates/` is acceptable to deploy, or are excluded by the project's deploy rules. They contain no secrets.
 - Staging basic auth is common; the developer's logged-in Chrome session already holds it (no credentials are asked or stored).
 
 ## Generic (`generic`)

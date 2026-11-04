@@ -1,7 +1,0 @@
-{
-  "name": "sla-playwright",
-  "private": true,
-  "description": "Playwright checks dedicated to the monthly SLA plugin maintenance",
-  "scripts": { "test": "playwright test" },
-  "devDependencies": { "@playwright/test": "1.49.1" }
-}

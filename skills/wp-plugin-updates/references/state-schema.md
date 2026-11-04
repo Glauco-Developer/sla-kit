@@ -1,4 +1,4 @@
-# State file: `SLA/YYYY-MM/state.json`
+# State file: `plugin-updates/YYYY-MM/state.json`
 
 Non-sensitive only. Never store credentials, tokens, cookies, or mailbox contents.
 
@@ -10,7 +10,7 @@ Non-sensitive only. Never store credentials, tokens, cookies, or mailbox content
   "kitVersion": "<contents of the skill's VERSION file>",
   "hosting": "vip | wpengine | generic (any other host)",
   "baseBranch": "main | master | production",
-  "slaBranch": "sla/plugins-updates-YYYY-MM",
+  "updatesBranch": "plugin-updates/YYYY-MM",
   "phase": "PREPARATION | LOCAL_UPDATES | LOCAL_VALIDATION | AWAITING_STAGING_DEPLOY | STAGING_VALIDATION | AWAITING_PRODUCTION_DEPLOY | PRODUCTION_VALIDATION | COMPLETED | COMPLETED_WITH_WARNINGS | BLOCKED | FAILED",
   "blockedReason": null,
   "startedAt": "ISO-8601",
@@ -40,4 +40,4 @@ Non-sensitive only. Never store credentials, tokens, cookies, or mailbox content
 Rules:
 - Write after each phase change and each plugin result.
 - On resume, a plugin with status other than `Pending` is **never** updated again; a form submission recorded in `staging.results` is **never** repeated without fresh approval.
-- Resume consistency checks: current branch equals `slaBranch` (or `baseBranch` if the SLA branch was merged), `installedVersion` matches the version on disk, `phase` is compatible with the report.
+- Resume consistency checks: current branch equals `updatesBranch` (or `baseBranch` if the updates branch was merged), `installedVersion` matches the version on disk, `phase` is compatible with the report.
