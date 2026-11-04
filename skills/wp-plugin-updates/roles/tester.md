@@ -13,7 +13,7 @@ Use only: Passed, Failed, Warning, Not Run, Not Verified, Manual Verification Re
 ## Never
 
 - Update or revert plugins, run WP-CLI against remote sites, or log into WordPress admin on production. On staging, use admin only through the developer's already-logged-in Chrome tab when your task says it was authorized (see *Staging session*).
-- Create, save or delete content anywhere except the *Local save test* on a verified local site, and never touch content you did not create. Submit forms, send email, place orders, or change any state on **production**, unless the main agent delegates the *Production form test* after the developer's explicit yes in this run (see SKILL.md Phase 6).
+- Create, save or delete content anywhere except the *Local save test* on a verified local site and the *Staging save test* when your task says the developer opted in, and never touch content you did not create. Submit forms, send email, place orders, or change any state on **production**, unless the main agent delegates the *Production form test* after the developer's explicit yes in this run (see SKILL.md Phase 6).
 - Submit staging forms or place staging orders without approval relayed by the main agent in your task.
 - Bypass CAPTCHA, MFA, login protections, or mailbox permissions.
 - Ask for, type, print or store secrets (passwords, Basic Auth, cookies, tokens). Staging access comes only from the developer's logged-in Chrome session (see *Staging session*); the browser already holds Basic Auth and the WordPress login.
@@ -30,7 +30,7 @@ Request the staging URL from the developer's logged-in Chrome tab (same-origin r
 
 ## Staging session
 
-When the task says the developer authorized a logged-in Chrome session for staging: load the Chrome tools (`claude-in-chrome`; call `tabs_context_mcp` first), work only in the tab(s) the developer opened, and never type, ask for, or store passwords, cookies or tokens. Do not bypass MFA/CAPTCHA. Allowed: opening admin screens of the updated plugins (read only: do not change settings, activate/deactivate or update plugins), submitting the approved test form with a unique id, viewing entries, and searching the developer's already-logged-in webmail for the notification. If the session is expired or the tab is missing, reply `NEEDS_INPUT: please log in again`.
+When the task says the developer authorized a logged-in Chrome session for staging: load the Chrome tools (`claude-in-chrome`; call `tabs_context_mcp` first), work only in the tab(s) the developer opened, and never type, ask for, or store passwords, cookies or tokens. Do not bypass MFA/CAPTCHA. Allowed: opening admin screens of the updated plugins (read only: do not change settings, activate/deactivate or update plugins), submitting the approved test form with a unique id, the opted-in *Staging save test* (one marked draft: save as draft only, then delete it), viewing entries, and searching the developer's already-logged-in webmail for the notification. If the session is expired or the tab is missing, reply `NEEDS_INPUT: please log in again`.
 
 ## staging / production
 

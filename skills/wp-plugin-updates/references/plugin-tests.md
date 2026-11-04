@@ -67,6 +67,24 @@ Many updates break **saving**, not rendering (ACF field groups, Yoast metadata, 
 
 Results: Passed (saved, read back, no new errors), Failed (save error, wrong value read back, new fatal), Not Run (guard failed or setting is `false`), Not Verified (no applicable field group or no way to read back). With a browser available on local, the same post can also be opened in the block editor to check for console errors, but that is optional.
 
+## Staging save test
+
+Same purpose as the *Local save test*, run on staging because staging is the closest copy of production. It is **opt-in every run** and only through the developer's logged-in Chrome tab in wp-admin. **Never WP-CLI on staging. Never on production.**
+
+**Before asking**, check the Plugins screen for plugins that react to saving: external search sync (ElasticPress, WP Search with Algolia), audit/activity logs (WP Activity Log, Simple History), webhook or automation plugins. If any exist, say so in one line (a draft may be synced, logged or trigger a webhook) before the question.
+
+**Question (one):** *Create a marked test draft to validate saving (Recommended)* / *Skip*. Run it only when ACF, Yoast or another plugin that adds fields or editor features was updated.
+
+**Procedure:**
+
+1. In the developer's tab: Posts -> Add New. Title `WPU-TEST <YYYYMMDD-HHMM>`. Save as **draft** and record the post ID and edit URL in `state.json` (`staging.contentTest`) immediately.
+2. Fill the first simple field of an ACF box and/or the Yoast title and meta description in the editor.
+3. **Save draft only.** Never Publish, Schedule or Update a live post. Reload the edit screen and verify the values persisted. Check for error notices and console errors.
+4. **Always clean up**, even after a failure: Move to Trash, then Delete Permanently, for **this post only** (never empty the whole trash, never touch other content). Verify it is gone and set `deleted: true`.
+5. If cleanup fails, report the post ID and edit URL to the developer so they can delete it, and mark the result at least Warning. Never leave it silently.
+
+Results: Passed, Failed (save error, value not persisted, error screen), Warning (saved but cleanup needed or integration side effects seen), Not Run (skipped), Not Verified (session expired or no applicable field).
+
 ## Basic Auth for the Playwright suite (optional, terminal runs only)
 
 The terminal suite does not share the developer's Chrome session. For staging it needs `PLUGIN_UPDATES_BASIC_AUTH_USER` / `PLUGIN_UPDATES_BASIC_AUTH_PASSWORD` exported by the developer (never asked in chat, never written to files or logs). Without them, staging checks go through the Chrome session. Local and production need none.
@@ -92,5 +110,6 @@ Only when the developer authorized the *Staging session*. Same recipes as local,
 1. Admin screens: open each updated plugin's admin screen (read only) and check for fatal or critical-error screens and visible admin notices about the update (DB upgrade prompts count as Warning: report, never click).
 2. Form plugins: submit the approved form with a unique id, verify the confirmation, verify the entry in the plugin's Entries/Submissions screen, then the notification per *Form notification check* (webmail tab only when the developer asks).
 3. Other plugins: ACF fields on edit screens, Post Expirator panel on a post edit screen (do not save the post), FacetWP index status, MultilingualPress switcher, Redirection list. Never save, publish, or delete content.
-4. Plugin versions: the admin Plugins screen lists installed versions; compare with `state.json` (this resolves versions marked Not Verified from the public check).
+4. **Staging save test (opt-in every run, see below).**
+5. Plugin versions: the admin Plugins screen lists installed versions; compare with `state.json` (this resolves versions marked Not Verified from the public check).
 

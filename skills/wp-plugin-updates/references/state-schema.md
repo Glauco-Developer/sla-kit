@@ -27,7 +27,7 @@ Non-sensitive only. Never store credentials, tokens, cookies, or mailbox content
     }
   ],
   "local": { "status": "Not Run | Passed | Failed | Warning | Not Verified", "validatedAt": null, "results": [], "contentTest": { "postIds": [], "deleted": false } },
-  "staging": { "status": "Not Run | Passed | Failed | Warning | Not Verified", "deployConfirmedAt": null, "results": [] },
+  "staging": { "status": "Not Run | Passed | Failed | Warning | Not Verified", "deployConfirmedAt": null, "results": [], "contentTest": { "postIds": [], "editUrls": [], "deleted": false } },
   "production": { "status": "Not Run | Passed | Failed | Warning | Not Verified", "deployConfirmedAt": null, "results": [] },
   "notifications": [],
   "outstandingActions": []
