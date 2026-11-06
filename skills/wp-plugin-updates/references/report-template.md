@@ -22,10 +22,11 @@ The stakeholder summary is a separate file, `plugin-updates/YYYY-MM/plugin-updat
 
 ### Plugin Updates
 
-| Plugin | Previous Version | Target Version | Installed Version | Status | Notes |
-|---|---|---|---|---|---|
+| Plugin | Previous Version | Target Version | Installed Version | Update Type | Status | Notes |
+|---|---|---|---|---|---|---|
 
 Statuses: Updated, Skipped, Failed, Manual Update Required, Already Up to Date.
+**Update type** (Major, Minor, Patch or Unknown): compare the previous (installed) version with the target version using `MAJOR.MINOR.PATCH`. A change in the first number is **Major**, in the second **Minor**, in the third **Patch**. Four-part versions (`1.2.3.4`) use the first three numbers; a change only in the fourth is Patch. Pre-release tags (`-beta`, `rc`) are ignored for the comparison. Date-based, non-numeric or unknown target versions are **Unknown**, never guessed. Show it for every row that has a target version; leave `-` only when there is no update available.
 Version columns are never `-`: always fill the installed version (WP-CLI or the `Version:` header); the target is a number or `unknown` (with the vendor named in Notes). Manual Update Required applies only to premium/licensed plugins; in-house plugins are Skipped.
 
 ### Manual Actions Required
@@ -89,9 +90,9 @@ Generated at Finish. Written for non-technical readers (clients, project manager
 
 ## Updated plugins
 
-| Plugin | Previous version | New version |
-|---|---|---|
-| <Name> | <old> | <new> |
+| Plugin | Previous version | New version | Type |
+|---|---|---|---|
+| <Name> | <old> | <new> | Major / Minor / Patch |
 
 ## Needs attention
 

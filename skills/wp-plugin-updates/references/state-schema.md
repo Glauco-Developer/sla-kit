@@ -22,6 +22,7 @@ Non-sensitive only. Never store credentials, tokens, cookies, or mailbox content
       "previousVersion": "",
       "targetVersion": "",
       "installedVersion": "",
+      "updateType": "Major | Minor | Patch | Unknown",
       "status": "Updated | Skipped | Failed | Manual Update Required | Already Up to Date | Pending",
       "notes": ""
     }
